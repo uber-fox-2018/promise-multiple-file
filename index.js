@@ -27,22 +27,25 @@ function readFilePromise(file) {
 
 function matchParentsWithChildrens(parentFileName, childrenFileName) {
   // your code here... (p.s. readFilePromise function(s) should be around here..)
+  let parent_data = null;
 	readFilePromise(parentFileName) 
-	.then(parent_data => {
+	.then(parents => {
+    parent_data = parents
 		 return readFilePromise(childrenFileName)
-		.then(children_data => {
-      for (let i=0; i<parent_data.length; i++) {
-        parent_data[i]["children"]= []
+  })
 
-        for (var child of children_data) {
-          if (parent_data[i]["last_name"]===child.family) {
-            parent_data[i]["children"].push(child.full_name)
-          }
+  .then(children_data => {
+    for (let i=0; i<parent_data.length; i++) {
+      parent_data[i]["children"]= []
+
+      for (var child of children_data) {
+        if (parent_data[i]["last_name"]===child.family) {
+          parent_data[i]["children"].push(child.full_name)
         }
       }
-      console.log (parent_data)
-		})
-	})
+    }
+    console.log (parent_data)
+  })
 		
 	.catch(err => {
 		console.log(`Terjadi error pada proses pembacaan data...  ${err}`)
